@@ -100,8 +100,13 @@ class SearchableBehavior extends CActiveRecordBehavior
     public function populateElasticDocument(DocumentInterface $document)
     {
         $document->setId($this->owner->getPrimaryKey());
-        foreach($this->owner->attributeNames() as $name)
-            $document->{$name} = $this->owner->{$name};
+        foreach($this->owner->attributeNames() as $name) {
+			$value = $this->owner->{$name};
+			if (preg_match('#^{((,?([^,]+))+)}$#', $value, $matches)) {
+				$value = explode(',',  $matches[1]);
+			}
+            $document->{$name} = $value;
+		}
     }
 
     /**
@@ -126,6 +131,9 @@ class SearchableBehavior extends CActiveRecordBehavior
         $document->setConnection($this->_elasticConnection);
         $document->setIndex($this->_elasticConnection->indexPrefix.$this->owner->elasticIndex);
         $document->setType($this->owner->elasticType);
+        if (method_exists  ($this->owner,'getParent')) {
+        	$document->setParent($this->owner->getParent());
+        }
         $this->owner->populateElasticDocument($document);
         return $document;
     }

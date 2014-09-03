@@ -41,6 +41,8 @@ class Document implements DocumentInterface, \ArrayAccess, \Countable, \Iterator
      */
     protected $_source = array();
 
+    protected $parentId = null;
+
     /**
      * @return Connection the elasticsearch connection to use for this document
      * @throws \Exception if no connection is specified
@@ -128,6 +130,14 @@ class Document implements DocumentInterface, \ArrayAccess, \Countable, \Iterator
         $this->_source = $data;
     }
 
+    public function getParent() {
+    	return $this->parentId;
+    }
+    
+    public function setParent($id) {
+    	$this->parentId = $id;
+    }
+    
     /**
      * @param string $name the name of the field to access
      * @return mixed the value

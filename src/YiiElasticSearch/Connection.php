@@ -90,7 +90,11 @@ class Connection extends ApplicationComponent
         }
         return $this->_client;
     }
-
+    public function getParent() {
+    	return false;
+    	
+    }
+    
     /**
      * Add a document to the index
      * @param DocumentInterface $document the document to index
@@ -99,8 +103,13 @@ class Connection extends ApplicationComponent
      * @return \Guzzle\Http\Message\Response|mixed the response from elastic search
      */
     public function index(DocumentInterface $document, $async = false)
-    {
-        $url = $document->getIndex().'/'.$document->getType().'/'.$document->getId();
+    {    	
+    	if(($parent = $document->getParent()) !== null) { 
+        	$url = $document->getIndex().'/'.$document->getType().'/'.$document->getId() .'?parent='.$parent;
+    	}
+    	else {
+        	$url = $document->getIndex().'/'.$document->getType().'/'.$document->getId();        	
+    	}
         $client = $async ? $this->getAsyncClient() : $this->getClient();
         $request = $client->put($url)->setBody(json_encode($document->getSource()));
         return $this->perform($request, $async);
