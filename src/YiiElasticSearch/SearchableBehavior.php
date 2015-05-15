@@ -101,12 +101,12 @@ class SearchableBehavior extends CActiveRecordBehavior
     {
         $document->setId($this->owner->getPrimaryKey());
         foreach($this->owner->attributeNames() as $name) {
-			$value = $this->owner->{$name};
-			if (preg_match('#^{((,?([^,]+))+)}$#', $value, $matches)) {
-				$value = explode(',',  $matches[1]);
-			}
+	    $value = $this->owner->{$name};
+	    if (is_string($value) && preg_match('#^{((,?([^,]+))+)}$#', $value, $matches)) {
+	        $value = explode(',',  $matches[1]);
+	    }
             $document->{$name} = $value;
-		}
+	}
     }
 
     /**
