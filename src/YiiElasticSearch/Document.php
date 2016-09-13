@@ -162,15 +162,7 @@ class Document implements DocumentInterface, \ArrayAccess, \Countable, \Iterator
     {
         $this->_source = $data;
     }
-
-    public function getParent() {
-    	return $this->parentId;
-    }
-    
-    public function setParent($id) {
-    	$this->parentId = $id;
-    }
-    
+        
     /**
      * @param string $name the name of the field to access
      * @return mixed the value
