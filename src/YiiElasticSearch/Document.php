@@ -22,6 +22,11 @@ class Document implements DocumentInterface, \ArrayAccess, \Countable, \Iterator
     protected $_connection;
 
     /**
+     * @var mixed id of the document's parent document
+     */
+    protected $_parent;
+
+    /**
      * @var mixed the id of the document
      */
     protected $_id;
@@ -63,6 +68,35 @@ class Document implements DocumentInterface, \ArrayAccess, \Countable, \Iterator
     public function setConnection($connection)
     {
         $this->_connection = $connection;
+    }
+
+    /**
+     * @return string the url of this document
+     */
+    public function getUrl()
+    {
+        $url =  $this->getIndex() . '/' . $this->getType() . '/' . $this->getId();
+        if ($this->getParent()) {
+            $url .= '?parent=' . $this->getParent();
+        }
+
+        return $url;
+    }
+
+    /**
+     * @return mixed ID of this document's parent document in the elasticsearch index
+     */
+    public function getParent()
+    {
+        return $this->_parent;
+    }
+
+    /**
+     * @param mixed $parent ID of this document's parent document in the elasticsearch index
+     */
+    public function setParent($parent)
+    {
+        $this->_parent = $parent;
     }
 
     /**
@@ -112,7 +146,6 @@ class Document implements DocumentInterface, \ArrayAccess, \Countable, \Iterator
     {
         $this->_id = $id;
     }
-
 
     /**
      * @return array the data that should be indexed
@@ -199,7 +232,6 @@ class Document implements DocumentInterface, \ArrayAccess, \Countable, \Iterator
     {
         return count($this->_source);
     }
-
 
     /**
      * (PHP 5 &gt;= 5.0.0)<br/>
