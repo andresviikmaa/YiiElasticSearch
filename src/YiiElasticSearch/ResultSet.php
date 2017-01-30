@@ -39,7 +39,7 @@ class ResultSet extends CComponent
      */
     public function getFacets()
     {
-        return isset($this->_raw['facets']) ? $this->_raw['facets'] : array();
+        return isset($this->_raw['aggregations']) ? $this->_raw['aggregations'] : array();
     }
 
     /**
